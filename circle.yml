@@ -13,5 +13,5 @@ dependencies:
   pre:
     - npm install -g npm@latest
 test:
-	override:
-		- npm run build
+  override:
+    - npm run build
