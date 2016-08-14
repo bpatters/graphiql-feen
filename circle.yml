@@ -1,0 +1,14 @@
+machine:
+  node:
+    version: 6.3.0
+
+dependencies:
+  pre:
+    - npm install -g npm@latest
+    - npm install -g node-sass
+  override:
+    - npm i
+test:
+  override:
+    - npm run build
+    - npm run lint
