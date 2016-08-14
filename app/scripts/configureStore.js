@@ -5,8 +5,11 @@ import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import rootReducer from 'reducers';
 import storage from 'scripts/utils/storage'
+import {IMPORT_STATE, makeImportable} from 'scripts/utils/importableState'
 
 const loggerMiddleware = createLogger();
+
+
 
 export default function (initialState) {
 	const finalCreateStore = compose(
@@ -15,7 +18,7 @@ export default function (initialState) {
 		batchedSubscribe(batchedUpdates)
 	)(createStore);
 
-	const store = finalCreateStore(rootReducer, initialState);
+	const store = finalCreateStore(makeImportable(rootReducer, IMPORT_STATE), initialState);
 
 	if (module.hot) {
 		// Enable Webpack hot module replacement for reducers

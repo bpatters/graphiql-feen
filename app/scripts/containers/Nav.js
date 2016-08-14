@@ -8,7 +8,9 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import * as NavStateActions from 'actions/NavStateActions';
-import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import * as StateSerialization from 'scripts/utils/serialization';
+import {IMPORT_STATE} from 'scripts/utils/importableState';
+import HiddenFileDrop from 'components/HiddenFileDrop';
 
 import {
 	shouldComponentUpdate
@@ -16,6 +18,7 @@ import {
 
 function mapStateToProps(state) {
 	return {
+		state : state
 	};
 }
 
@@ -35,8 +38,24 @@ class Nav extends Component {
 	};
 
 	onExport = () => {
+		let message = {state: StateSerialization.stateToJSON(this.props.state)};
+		console.log(`sending ${JSON.stringify(message)}`);
+		chrome.runtime.sendMessage(message, function(response) {
+			console.log(response);
+		});
+	};
 
-	}
+	onImport = () => {
+		this.refs.fileDrop.onTriggerInput();
+	};
+
+	onImportFile = (newState) => {
+		console.log(newState);
+		this.props.dispatch({
+			type: IMPORT_STATE,
+			state: StateSerialization.stateFromJSON(newState)
+		});
+	};
 
 	render() {
 		return (
@@ -51,11 +70,15 @@ class Nav extends Component {
 						targetOrigin={{horizontal: 'right', vertical: 'top'}}
 						anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
 					>
+						<MenuItem primaryText="Import" onClick={this.onImport}/>
 						<MenuItem primaryText="Export" onClick={this.onExport}/>
 						<Divider/>
 						<MenuItem primaryText="About"/>
 					</IconMenu>}
-			/>
+			>
+				<HiddenFileDrop ref="fileDrop" onChange={this.onImportFile}/>
+			</AppBar>
+
 		)
 	}
 }

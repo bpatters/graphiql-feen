@@ -35,3 +35,16 @@ chrome.browserAction.onClicked.addListener( () => {
 		url: "/index.html"
 	} )
 });
+
+
+
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		bkp.console.log(`received request:${request} sender:${sender} sendResponse:${sendResponse}`);
+		var url = 'data:application/json;base64,' + btoa(request.state);
+		chrome.downloads.download({
+			url: url,
+			filename: 'graphiqlfeen.json'
+		});
+		sendResponse({farewell: "goodbye"});
+	});
