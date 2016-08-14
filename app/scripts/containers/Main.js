@@ -1,16 +1,16 @@
 import React, {Component, PropTypes} from "react";
-import {connect} from 'react-redux';
-import styles from 'styles/Main.scss';
-import GraphiQL from 'graphiql';
-import Nav from 'containers/Nav';
-import * as QueryActions from 'actions/QueryActions';
-import {List, ListItem} from 'material-ui/List';
-import Queries from 'containers/Queries';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import MenuIcon from 'material-ui/svg-icons/navigation/menu';
-import * as NavStateActions from 'actions/NavStateActions';
-import IconButton from 'material-ui/IconButton';
-import Settings from 'containers/Settings';
+import {connect} from "react-redux";
+import styles from "styles/Main.scss";
+import GraphiQL from "graphiql";
+import Nav from "containers/Nav";
+import * as QueryActions from "actions/QueryActions";
+import Queries from "containers/Queries";
+import {Tabs, Tab} from "material-ui/Tabs";
+import MenuIcon from "material-ui/svg-icons/navigation/menu";
+import * as NavStateActions from "actions/NavStateActions";
+import IconButton from "material-ui/IconButton";
+import Settings from "containers/Settings";
+import ServerRecord from "records/ServerRecord";
 
 import {
 	shouldComponentUpdate
@@ -26,15 +26,21 @@ function mapStateToProps(state) {
 }
 
 class Main extends Component {
-	static displayName = 'Main';
-	static propTypes   = {};
+	static displayName = "Main";
+	static propTypes   = {
+		dispatch     : PropTypes.func.isRequired,
+		query        : PropTypes.string,
+		variables    : PropTypes.string,
+		leftPanelOpen: PropTypes.bool.isRequired,
+		currentServer: PropTypes.instanceOf(ServerRecord)
+	};
 
 	static defaultProps = {};
 
 	shouldComponentUpdate = shouldComponentUpdate;
 
 	graphQLFetcher = (data) => {
-		let formData = new FormData();
+		const formData = new FormData();
 		formData.append("query", data.query);
 		formData.append("variables", data.variables);
 
@@ -44,23 +50,13 @@ class Main extends Component {
 			headers    : this.props.currentServer.headers.toObject(),
 			body       : formData
 		}).then((res) => {
-			if (res.status == 200) {
+			if (res.status === 200) {
 				return res.json().then((json) => {
 					return json;
-				})
-			} else {
-				dispatch(createEventFailed({
-					errorMessage: `Failed with ${res}`
-				}));
-				return res;
+				});
 			}
-		}).catch((err) => {
-			console.log(err);
-			dispatch(createEventFailed({
-				errorMessage: `Failed with error ${err}`
-			}));
 			return res;
-		})
+		});
 	};
 
 	onQueryChange     = (query) => {
@@ -70,8 +66,7 @@ class Main extends Component {
 		this.props.dispatch(QueryActions.updateCurrentQuery({variables}));
 	};
 	toggleLeftPanel   = () => {
-		console.log("open left panel!");
-		this.props.dispatch(NavStateActions.toggleLeftPanel())
+		this.props.dispatch(NavStateActions.toggleLeftPanel());
 	};
 
 	renderGraphIQL = () => {
@@ -92,7 +87,8 @@ class Main extends Component {
 					<Queries onClose={this.toggleLeftPanel}/>
 				</div>
 			);
-		} else return (
+		}
+		return (
 			<IconButton onClick={this.toggleLeftPanel}>
 				<MenuIcon/>
 			</IconButton>
@@ -103,7 +99,7 @@ class Main extends Component {
 		return (
 			<div className={styles.main}>
 				<Nav/>
-				<div className={styles.body}>
+				<div className={styles.mainView}>
 					<Tabs style={{width: "100%"}}>
 						<Tab label="Queries">
 							<div className={styles.queries}>
@@ -117,7 +113,7 @@ class Main extends Component {
 					</Tabs>
 				</div>
 			</div>
-		)
+		);
 	}
 }
 

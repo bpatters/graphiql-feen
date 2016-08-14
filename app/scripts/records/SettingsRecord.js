@@ -1,5 +1,5 @@
-import Immutable from 'immutable';
-import ServerRecord from './ServerRecord';
+import Immutable from "immutable";
+import ServerRecord from "./ServerRecord";
 
 
 export default new Immutable.Record(

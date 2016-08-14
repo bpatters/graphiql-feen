@@ -1,17 +1,17 @@
 import React, {Component, PropTypes} from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 
 
 class HiddenFileDrop extends Component {
-	static displayName = 'HiddenFileDrop';
+	static displayName = "HiddenFileDrop";
 	static propTypes   = {
 		placeHolderText: PropTypes.string,
 		onChange       : PropTypes.func
 	};
 
 	static defaultProps = {
-		onChange: function () {
-		},
+		onChange() {
+		}
 	};
 
 
@@ -21,7 +21,7 @@ class HiddenFileDrop extends Component {
 
 	onChange = () => {
 		if (this.refs._fileInput.files && this.refs._fileInput.files[0]) {
-			var reader    = new FileReader();
+			const reader    = new FileReader();
 			reader.onload = (e) => {
 				this.props.onChange(e.target.result);
 				// set input to null so same file can be selected again
@@ -33,7 +33,7 @@ class HiddenFileDrop extends Component {
 
 	renderInput = () => {
 		return (
-			<input children={undefined} type="file"
+			<input type="file"
 						 onChange={this.onChange} ref="_fileInput"
 						 style={{position: "absolute", top: "-99999px"}}/>
 		);
@@ -41,7 +41,7 @@ class HiddenFileDrop extends Component {
 
 	render() {
 		return (this.renderInput());
-	};
+	}
 }
 
 export default HiddenFileDrop;

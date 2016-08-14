@@ -1,10 +1,10 @@
-import Immutable from 'immutable';
+import {Map, Record} from "immutable";
 
-export default new Immutable.Record(
+export default new Record(
 	{
-		url    : '',
-		headers: new Immutable.Map(),
-		cookies: new Immutable.Map(),
+		url    : "",
+		headers: new Map(),
+		cookies: new Map(),
 		authorization: true
 	},
 	"Server"

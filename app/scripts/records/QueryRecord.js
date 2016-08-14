@@ -1,9 +1,9 @@
-import Immutable from 'immutable';
+import {Record} from "immutable";
 
-export default new Immutable.Record(
+export default new Record(
 	{
-		name         : '',
-		query        : '',
-		variables    : ''
+		name         : "",
+		query        : "",
+		variables    : ""
 	}
-, 'Query');
+, "Query");

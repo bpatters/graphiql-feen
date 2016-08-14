@@ -1,21 +1,15 @@
 import React, {Component, PropTypes} from "react";
-import {connect} from 'react-redux';
-import styles from 'styles/components/KeyValueView.scss';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import IconButton from 'material-ui/IconButton';
-import {List, ListItem} from 'material-ui/List';
-import lodash from 'lodash';
-
-
-import {
-	shouldComponentUpdate
-} from "react-immutable-render-mixin";
+import styles from "styles/components/KeyValueView.scss";
+import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
+import Paper from "material-ui/Paper";
+import CloseIcon from "material-ui/svg-icons/navigation/close";
+import IconButton from "material-ui/IconButton";
+import {List, ListItem} from "material-ui/List";
+import lodash from "lodash";
 
 class KeyValueView extends Component {
-	static displayName = 'KeyValueView';
+	static displayName = "KeyValueView";
 	static propTypes   = {
 		addLabel     : PropTypes.string,
 		keyLabel     : PropTypes.string,
@@ -26,13 +20,13 @@ class KeyValueView extends Component {
 	};
 
 	static defaultProps = {
-		addLabel     : "Add",
-		keyLabel     : "Name",
-		valueLabel   : "Value",
-		keyValueMap  : {},
-		onDeleteKey  : function (key) {
+		addLabel   : "Add",
+		keyLabel   : "Name",
+		valueLabel : "Value",
+		keyValueMap: {},
+		onDeleteKey() {
 		},
-		onAddKeyValue: function (key, value) {
+		onAddKeyValue() {
 		}
 	};
 
@@ -41,12 +35,10 @@ class KeyValueView extends Component {
 		value: ""
 	};
 
-	//shouldComponentUpdate = shouldComponentUpdate;
-
 	onDeleteKeyPrivate = (key) => {
-		return (key) => {
+		return () => {
 			this.props.onDeleteKey(key);
-		}
+		};
 	};
 
 	onAddKeyValuePrivate = () => {
@@ -59,7 +51,7 @@ class KeyValueView extends Component {
 			return (
 				<ListItem key={`key-${key}`} primaryText={`${key} = ${value}`}
 									rightIconButton={<IconButton onClick={this.onDeleteKeyPrivate(key)}><CloseIcon/></IconButton>}/>
-			)
+			);
 		});
 	};
 
@@ -73,17 +65,17 @@ class KeyValueView extends Component {
 
 	render() {
 		return (
-			<Paper zDepth={5} style={{width:"100%", height:"100%"}}>
+			<Paper zDepth={5} style={{width: "100%", height: "100%"}}>
 				<div className={styles.toolbar}>
 					<TextField
 						floatingLabelText={this.props.keyLabel}
-						floatingLabelFixed={true}
+						floatingLabelFixed
 						onChange={(event, key) => this.setState({key})}
 						value={this.state.key}
 					/>
 					<TextField
 						floatingLabelText={this.props.valueLabel}
-						floatingLabelFixed={true}
+						floatingLabelFixed
 						onChange={(event, value) => this.setState({value})}
 						style={{margin: "0 20px"}}
 						value={this.state.value}
@@ -94,7 +86,7 @@ class KeyValueView extends Component {
 					{this.renderHeaderTable()}
 				</div>
 			</Paper>
-		)
+		);
 	}
 }
 

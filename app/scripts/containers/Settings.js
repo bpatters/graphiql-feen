@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from "react";
-import {connect} from 'react-redux';
-import styles from 'styles/Settings.scss';
-import AutoComplete from 'material-ui/AutoComplete';
-import * as SettingsActions from 'actions/SettingsActions'
-import {List, ListItem} from 'material-ui/List';
-import KeyValueView from "components/KeyValueView"
+import {connect} from "react-redux";
+import styles from "styles/Settings.scss";
+import AutoComplete from "material-ui/AutoComplete";
+import * as SettingsActions from "actions/SettingsActions";
+import KeyValueView from "components/KeyValueView";
+import RaisedButton from "material-ui/RaisedButton";
+import Immutable from "immutable";
 
 import {
 	shouldComponentUpdate
@@ -13,14 +14,20 @@ import {
 function mapStateToProps(state) {
 	return {
 		settings     : state.settings,
-		currentServer: state.settings.currentServer
+		currentServer: state.settings.currentServer,
+		servers      : state.settings.servers
 	};
 }
 
 class Settings extends Component {
-	static displayName = 'Settings';
-	static propTypes   = {};
+	static displayName = "Settings";
 
+	static propTypes    = {
+		settings     : PropTypes.object.isRequired,
+		dispatch     : PropTypes.func.isRequired,
+		currentServer: PropTypes.object.isRequired,
+		servers      : PropTypes.instanceOf(Immutable.List)
+	};
 	static defaultProps = {};
 
 	shouldComponentUpdate = shouldComponentUpdate;
@@ -36,18 +43,36 @@ class Settings extends Component {
 	};
 
 	addHeader = (key, value) => {
-		this.props.dispatch(SettingsActions.addServerHeader({[key]: value}))
+		this.props.dispatch(SettingsActions.addServerHeader({[key]: value}));
 	};
 
 	onDeleteHeader = (key) => {
 		this.props.dispatch(SettingsActions.deleteServerHeader(key));
 	};
-	addCookie = (key, value) => {
-		this.props.dispatch(SettingsActions.addServerCookie({[key]: value}))
+	addCookie      = (key, value) => {
+		this.props.dispatch(SettingsActions.addServerCookie({[key]: value}));
 	};
 
 	onDeleteCookie = (key) => {
 		this.props.dispatch(SettingsActions.deleteServerCookie(key));
+	};
+
+	onSaveServer = () => {
+		this.props.dispatch(SettingsActions.saveCurrentServer());
+	};
+
+	onServerSelected = (chosenRequest, index) => {
+		let serverIndex = index;
+
+		if (chosenRequest) {
+			serverIndex = this.props.servers.findKey((server) => {
+				return server.url === chosenRequest;
+			});
+		}
+
+		if (serverIndex > 0 && serverIndex < this.props.servers.size) {
+			this.props.dispatch(SettingsActions.selectServer(this.props.servers.get(serverIndex)));
+		}
 	};
 
 
@@ -58,9 +83,12 @@ class Settings extends Component {
 					floatingLabelText="Server Url"
 					dataSource={this.urlDataSource()}
 					onUpdateInput={this.onUpdateInput}
-					fullWidth={true}
-					searchText={this.props.currentServer.url}>
-				</AutoComplete>
+					fullWidth
+					onNewRequest={this.onServerSelected}
+					searchText={this.props.currentServer.url}/>
+				<div style={{display: "none", alignSelf: "center", margin: "15px 0 0 10px"}}>
+					<RaisedButton label="Save" onClick={this.onSaveServer}/>
+				</div>
 
 				<div className={styles.tables}>
 					<KeyValueView
@@ -73,7 +101,7 @@ class Settings extends Component {
 					/>
 				</div>
 			</div>
-		)
+		);
 	}
 }
 

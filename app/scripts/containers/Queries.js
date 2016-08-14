@@ -1,15 +1,16 @@
 import React, {Component, PropTypes} from "react";
-import {connect} from 'react-redux';
-import styles from 'styles/Queries.scss';
-import {List, ListItem} from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import * as QueryActions from 'actions/QueryActions';
-import ActionInfo from 'material-ui/svg-icons/action/delete-forever';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import {connect} from "react-redux";
+import styles from "styles/Queries.scss";
+import {List, ListItem} from "material-ui/List";
+import Subheader from "material-ui/Subheader";
+import Divider from "material-ui/Divider";
+import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
+import * as QueryActions from "actions/QueryActions";
+import ActionInfo from "material-ui/svg-icons/action/delete-forever";
+import CloseIcon from "material-ui/svg-icons/navigation/close";
+import Immutable from "immutable";
+import QueryRecord from "scripts/records/QueryRecord";
 
 
 import {
@@ -25,9 +26,12 @@ function mapStateToProps(state) {
 }
 
 class Queries extends Component {
-	static displayName = 'Queries';
+	static displayName = "Queries";
 	static propTypes   = {
-		onClose: PropTypes.func
+		onClose     : PropTypes.func,
+		dispatch    : PropTypes.func,
+		queries     : PropTypes.instanceOf(Immutable.List),
+		currentQuery: PropTypes.instanceOf(QueryRecord)
 	};
 
 	static defaultProps = {};
@@ -38,13 +42,13 @@ class Queries extends Component {
 
 		return () => {
 			this.props.dispatch(QueryActions.deleteQuery(index));
-		}
+		};
 	};
 	onQuerySelect = (index) => {
 
 		return () => {
-			this.props.dispatch(QueryActions.updateCurrentQuery(this.props.queries.get(index)));
-		}
+			this.props.dispatch(QueryActions.updateCurrentQuery(this.props.queries.get(index).toObject()));
+		};
 	};
 
 	renderQueries = () => {
@@ -56,8 +60,8 @@ class Queries extends Component {
 					onClick={this.onQuerySelect(index)}
 					rightIcon={<ActionInfo onClick={this.onQueryDelete(index)}/>}
 				/>
-			)
-		})
+			);
+		});
 	};
 
 	onQueryNameChange = (event, value) => {
@@ -71,7 +75,7 @@ class Queries extends Component {
 			this.props.dispatch(QueryActions.saveCurrentQuery());
 			this.props.dispatch(QueryActions.updateCurrentQuery({name: ""}));
 		};
-		if (typeof index === 'undefined') {
+		if (typeof index === "undefined") {
 			action();
 		} else {
 			this.props.dispatch(QueryActions.deleteQuery(index));
@@ -81,31 +85,33 @@ class Queries extends Component {
 
 	queryWithNameIndex = () => {
 		return this.props.queries.findKey((query) => {
-			return query.name == this.props.currentQuery.name
+			return query.name === this.props.currentQuery.name;
 		});
 	};
 
 	queryWithNameExists() {
-		return !(typeof this.queryWithNameIndex() === 'undefined');
+		return !(typeof this.queryWithNameIndex() === "undefined");
 	}
 
 	render() {
 		return (
 			<List>
 				<div className={styles.closeBox}>
-							<CloseIcon onClick={this.props.onClose} />
+					<CloseIcon onClick={this.props.onClose}/>
 				</div>
 				<div className={styles.saveBox}>
 					<TextField
 						floatingLabelText="Query Name"
-						floatingLabelFixed={true}
+						floatingLabelFixed
 						onChange={this.onQueryNameChange}
 						value={this.props.currentQuery.name}
-						fullWidth={true}
+						fullWidth
 					/>
 					<div style={{alignSelf: "center", margin: "15px 0 0 10px"}}>
-						<RaisedButton label={this.queryWithNameExists() ? "Update" : "Save"} onClick={this.saveQuery}
-													disabled={!this.props.currentQuery.name}/>
+						<RaisedButton
+							label={this.queryWithNameExists() ? "Update" : "Save"}
+							onClick={this.saveQuery}
+							disabled={!this.props.currentQuery.name}/>
 					</div>
 				</div>
 				<Subheader> Saved Queries </Subheader>
@@ -113,7 +119,7 @@ class Queries extends Component {
 				<Divider/>
 			</List>
 
-		)
+		);
 	}
 }
 

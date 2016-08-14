@@ -1,4 +1,4 @@
-export const IMPORT_STATE = 'IMPORT_STATE';
+export const IMPORT_STATE = "IMPORT_STATE";
 
 export function makeImportable(reducer, hydrateActionType) {
 	return function (state, action) {
@@ -8,5 +8,5 @@ export function makeImportable(reducer, hydrateActionType) {
 			default:
 				return reducer(state, action);
 		}
-	}
+	};
 }

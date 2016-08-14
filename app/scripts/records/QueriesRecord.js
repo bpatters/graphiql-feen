@@ -1,9 +1,9 @@
-import Immutable from 'immutable';
-import QueryRecord from './QueryRecord';
-export default new Immutable.Record(
+import {Record, List} from "immutable";
+import QueryRecord from "./QueryRecord";
+export default new Record(
 	{
-		currentQuery : new QueryRecord(),
-		queries: new Immutable.List()
+		currentQuery: new QueryRecord(),
+		queries     : new List()
 	},
 	"Queries"
 );

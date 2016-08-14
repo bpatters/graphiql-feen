@@ -1,12 +1,12 @@
-import { combineReducers } from 'redux';
-import queries from './queries';
-import navstate from './navstate';
-import settings from './settings';
+import { combineReducers } from "redux";
+import queries from "./queries";
+import navstate from "./navstate";
+import settings from "./settings";
 
 const reducers = {
 	queries,
 	settings,
-	navstate,
+	navstate
 };
 
 const rootReducer = combineReducers({

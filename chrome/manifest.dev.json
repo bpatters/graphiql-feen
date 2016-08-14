@@ -15,12 +15,12 @@
 		"page": "background.html"
 	},
 	"permissions": [
-		"management",
-		"tabs",
 		"storage",
-		"https://*/*",
-		"cookies",
 		"downloads"
 	],
-	"content_security_policy": "default-src 'self'; script-src 'self' http://localhost:3000 https://localhost:3000 'unsafe-eval' ; connect-src http://*:* https://*:*; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
+	"optional_permissions" : [
+		"webRequestBlocking",
+		"*://*/*"
+	],
+	"content_security_policy": "default-src 'self'; script-src 'self' http://localhost:3000 https://localhost:3000 'unsafe-eval' ;font-src *; connect-src http://*:* https://*:*; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
 }

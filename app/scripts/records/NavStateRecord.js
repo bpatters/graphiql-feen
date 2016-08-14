@@ -1,8 +1,8 @@
-import Immutable from 'immutable';
+import {Record} from "immutable";
 
-export default new Immutable.Record(
+export default new Record(
 	{
 		leftPanelOpen: false
 	},
-	'NavState'
+	"NavState"
 );

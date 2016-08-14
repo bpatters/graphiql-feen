@@ -1,10 +1,10 @@
-import {createAction} from 'redux-actions';
+import {createAction} from "redux-actions";
 
 
-export const UPDATE_CURRENT_QUERY = 'UPDATE_QUERY';
-export const SAVE_CURRENT_QUERY   = 'SAVE_CURRENT_QUERY';
-export const DELETE_QUERY         = 'DELETE_QUERY';
-export const ADD_QUERY            = 'ADD_QUERY';
+export const UPDATE_CURRENT_QUERY = "UPDATE_CURRENT_QUERY";
+export const SAVE_CURRENT_QUERY   = "SAVE_CURRENT_QUERY";
+export const DELETE_QUERY         = "DELETE_QUERY";
+export const ADD_QUERY            = "ADD_QUERY";
 
 export const updateCurrentQueryAction = createAction(UPDATE_CURRENT_QUERY);
 export const saveCurrentQueryAction   = createAction(SAVE_CURRENT_QUERY);
