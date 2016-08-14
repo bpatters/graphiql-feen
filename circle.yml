@@ -1,0 +1,17 @@
+machine:
+  pre:
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 10
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 10
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 20
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 20
+  node:
+    version: 6.2.1
+  environment:
+    UV_THREADPOOL_SIZE: 128
+
+dependencies:
+  pre:
+    - npm install -g npm@latest
+test:
+	override:
+		- npm run build
