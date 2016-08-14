@@ -1,12 +1,12 @@
 machine:
   node:
     version: 6.2.1
-  environment:
-    UV_THREADPOOL_SIZE: 128
 
 dependencies:
   pre:
     - npm install -g npm@latest
+  override:
+    - npm i
 test:
   override:
     - npm run build
