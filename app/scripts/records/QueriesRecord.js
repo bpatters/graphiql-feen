@@ -4,5 +4,6 @@ export default new Immutable.Record(
 	{
 		currentQuery : new QueryRecord(),
 		queries: new Immutable.List()
-	}
+	},
+	"Queries"
 );

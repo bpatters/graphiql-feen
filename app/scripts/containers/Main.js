@@ -20,8 +20,8 @@ function mapStateToProps(state) {
 	return {
 		query        : state.queries.currentQuery.query,
 		variables    : state.queries.currentQuery.variables,
-		leftPanelOpen: state.navstate.navState.leftPanelOpen,
-		currentServer : state.settings.currentServer
+		leftPanelOpen: state.navstate.leftPanelOpen,
+		currentServer: state.settings.currentServer
 	};
 }
 
@@ -37,9 +37,11 @@ class Main extends Component {
 		let formData = new FormData();
 		formData.append("query", data.query);
 		formData.append("variables", data.variables);
+
 		return fetch(this.props.currentServer.url, {
 			method     : "post",
 			credentials: "include",
+			headers    : this.props.currentServer.headers.toObject(),
 			body       : formData
 		}).then((res) => {
 			if (res.status == 200) {
@@ -67,7 +69,7 @@ class Main extends Component {
 	onVariablesChange = (variables) => {
 		this.props.dispatch(QueryActions.updateCurrentQuery({variables}));
 	};
-	toggleLeftPanel = () => {
+	toggleLeftPanel   = () => {
 		console.log("open left panel!");
 		this.props.dispatch(NavStateActions.toggleLeftPanel())
 	};

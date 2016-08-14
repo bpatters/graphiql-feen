@@ -6,5 +6,6 @@ export default new Immutable.Record(
 		headers: new Immutable.Map(),
 		cookies: new Immutable.Map(),
 		authorization: true
-	}
+	},
+	"Server"
 );

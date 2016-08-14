@@ -6,4 +6,4 @@ export default new Immutable.Record(
 		query        : '',
 		variables    : ''
 	}
-);
+, 'Query');

@@ -25,13 +25,12 @@ promisifyAll(chrome, [
 	'windows',
 	'browserAction'
 ]);
+
 promisifyAll(chrome.storage, [
 	'local',
 ]);
 
-bkp.console.log("creating tab!");
 chrome.browserAction.onClicked.addListener( () => {
-	bkp.console.log("creating tab!");
 	chrome.tabs.create({
 		url: "/index.html"
 	} )

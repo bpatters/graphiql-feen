@@ -4,12 +4,14 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import rootReducer from 'reducers';
+import storage from 'scripts/utils/storage'
 
 const loggerMiddleware = createLogger();
 
 export default function (initialState) {
 	const finalCreateStore = compose(
 		applyMiddleware(thunkMiddleware, loggerMiddleware),
+		storage(),
 		batchedSubscribe(batchedUpdates)
 	)(createStore);
 

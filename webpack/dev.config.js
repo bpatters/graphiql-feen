@@ -70,6 +70,7 @@ const baseDevConfig = () => ({
 		alias   : {
 			'styles'    : path.join(__dirname, '../app/styles'),
 			'scripts'   : path.join(__dirname, '../app/scripts'),
+			'components': path.join(__dirname, '../app/scripts/components'),
 			'images'    : path.join(__dirname, '../app/images')
 		}
 	},

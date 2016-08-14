@@ -34,6 +34,10 @@ class Nav extends Component {
 		this.props.dispatch(NavStateActions.toggleLeftPanel())
 	};
 
+	onExport = () => {
+
+	}
+
 	render() {
 		return (
 			<AppBar
@@ -47,7 +51,7 @@ class Nav extends Component {
 						targetOrigin={{horizontal: 'right', vertical: 'top'}}
 						anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
 					>
-						<MenuItem primaryText="Export"/>
+						<MenuItem primaryText="Export" onClick={this.onExport}/>
 						<Divider/>
 						<MenuItem primaryText="About"/>
 					</IconMenu>}

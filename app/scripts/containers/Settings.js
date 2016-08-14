@@ -4,11 +4,7 @@ import styles from 'styles/Settings.scss';
 import AutoComplete from 'material-ui/AutoComplete';
 import * as SettingsActions from 'actions/SettingsActions'
 import {List, ListItem} from 'material-ui/List';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import IconButton from 'material-ui/IconButton';
+import KeyValueView from "components/KeyValueView"
 
 import {
 	shouldComponentUpdate
@@ -27,8 +23,7 @@ class Settings extends Component {
 
 	static defaultProps = {};
 
-//	shouldComponentUpdate = shouldComponentUpdate;
-
+	shouldComponentUpdate = shouldComponentUpdate;
 
 	urlDataSource = () => {
 		return this.props.settings.servers.map(server => {
@@ -40,31 +35,21 @@ class Settings extends Component {
 		this.props.dispatch(SettingsActions.saveServerUrl(value));
 	};
 
-	onHeaderChange = (index) => {
-
+	addHeader = (key, value) => {
+		this.props.dispatch(SettingsActions.addServerHeader({[key]: value}))
 	};
 
-	renderHeaderTableRows = () => {
-		return this.props.currentServer.headers.map((value, key) => {
-			return (
-				<ListItem key={`key-${key}`} primaryText={key} secondaryText={value}
-									secondaryTextLines={2}
-									rightIconButton={<IconButton><CloseIcon onClick={this.props.onClose}/></IconButton>}/>
-			)
-		}).toArray();
+	onDeleteHeader = (key) => {
+		this.props.dispatch(SettingsActions.deleteServerHeader(key));
+	};
+	addCookie = (key, value) => {
+		this.props.dispatch(SettingsActions.addServerCookie({[key]: value}))
 	};
 
-	renderHeaderTable = () => {
-		return (
-			<List>
-				{this.renderHeaderTableRows()}
-			</List>
-		);
+	onDeleteCookie = (key) => {
+		this.props.dispatch(SettingsActions.deleteServerCookie(key));
 	};
 
-	addHeader = () => {
-		this.props.dispatch(SettingsActions.addServerHeader({[this.state.name]: this.state.value}))
-	};
 
 	render() {
 		return (
@@ -73,29 +58,19 @@ class Settings extends Component {
 					floatingLabelText="Server Url"
 					dataSource={this.urlDataSource()}
 					onUpdateInput={this.onUpdateInput}
-					fullWidth={true}>
+					fullWidth={true}
+					searchText={this.props.currentServer.url}>
 				</AutoComplete>
 
-				<div className={styles.headers}>
-					<Paper zDepth={5}>
-						<div className={styles.toolbar}>
-							<TextField
-								floatingLabelText="Header Name"
-								floatingLabelFixed={true}
-								onChange={(event, name) => this.setState({name})}
-							/>
-							<TextField
-								floatingLabelText="Header Value"
-								floatingLabelFixed={true}
-								onChange={(event,value) => this.setState({value})}
-								style={{margin: "0 20px"}}
-							/>
-							<RaisedButton label="Add Header" onClick={this.addHeader}/>
-						</div>
-						<div className={styles.headerTable}>
-							{this.renderHeaderTable()}
-						</div>
-					</Paper>
+				<div className={styles.tables}>
+					<KeyValueView
+						addLabel="Add Header"
+						keyLabel="Header Name"
+						valueLabel="Header Value"
+						keyValueMap={this.props.currentServer.headers.toObject()}
+						onDeleteKey={this.onDeleteHeader}
+						onAddKeyValue={this.addHeader}
+					/>
 				</div>
 			</div>
 		)
