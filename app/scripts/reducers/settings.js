@@ -15,8 +15,18 @@ import {
 
 const initialState = new SettingsRecord();
 
+const updateBackgroundServer = (server) => {
+	const message = {
+		type: "SERVER",
+		currentServer: server
+	};
+	/*eslint no-undef:0*/
+	chrome.runtime.sendMessage(message, function () {
+	});
+};
+
 export default  handleActions({
-	[SAVE_CURRENT_SERVER]  : (state) => {
+	[SAVE_CURRENT_SERVER]: (state) => {
 		return state.withMutations(newState => {
 			return newState.setIn(["servers"], newState.servers.unshift(state.currentServer));
 		});
@@ -26,32 +36,42 @@ export default  handleActions({
 			return newState.setIn(["servers"], newState.servers.delete(action.payload.index));
 		});
 	},
-	[SAVE_SERVER_URL]      : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[SAVE_SERVER_URL]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.set("url", action.payload.url);
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[ADD_SERVER_HEADER]    : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[ADD_SERVER_HEADER]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.mergeIn(["headers"], new Map(action.payload.header));
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[DELETE_SERVER_HEADER] : (state, action) => {
+	[DELETE_SERVER_HEADER]: (state, action) => {
 		return state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.deleteIn(["headers"], action.payload.key);
+			return newState.setIn(["headers"], newState.headers.delete(action.payload.key));
 		}));
 	},
-	[ADD_SERVER_COOKIE]    : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[ADD_SERVER_COOKIE]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.mergeIn(["cookies"], new Map(action.payload.cookie));
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[DELETE_SERVER_COOKIE] : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[DELETE_SERVER_COOKIE]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.deleteIn(["cookies"], action.payload.key);
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[SELECT_SERVER]        : (state, action) => {
-		return state.set("currentServer", action.payload.server);
+	[SELECT_SERVER]: (state, action) => {
+		const rv = state.set("currentServer", action.payload.server);
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	}
 }, initialState);

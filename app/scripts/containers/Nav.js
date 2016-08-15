@@ -39,7 +39,10 @@ class Nav extends Component {
 	};
 
 	onExport = () => {
-		const message = {state: StateSerialization.stateToJSON(this.props.state)};
+		const message = {
+			type: "DOWNLOAD",
+			state: StateSerialization.stateToJSON(this.props.state)
+		};
 		/*eslint no-undef:0*/
 		chrome.runtime.sendMessage(message, function() {
 		});

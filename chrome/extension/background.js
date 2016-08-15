@@ -3,7 +3,9 @@
 
 const bluebird = require("bluebird");
 global.Promise = bluebird;
+import ServerRecord from "scripts/records/ServerRecord";
 
+let currentServer = new ServerRecord();
 function promisifier(method) {
 	// return a function
 	return function promisified(...args) {
@@ -30,36 +32,45 @@ promisifyAll(chrome.storage, [
 	"local"
 ]);
 
+const replaceHeadersFunction = function (details) {
+	const bkp = chrome.extension.getBackgroundPage();
+	bkp.console.log(`${JSON.stringify(details.requestHeaders)}`);
+	for (let i = 0; i < details.requestHeaders.length; ++i) {
+		const name = details.requestHeaders[i].name;
+		if (currentServer.headers.hasOwnProperty(name)) {
+			details.requestHeaders[i].value = currentServer.headers[name];
+			bkp.console.log(`Setting header ${name} = ${currentServer.headers[name]}`);
+		}
+	}
+	return {requestHeaders: details.requestHeaders};
+};
+
 chrome.browserAction.onClicked.addListener(() => {
-	chrome.tabs.create({
+	chrome.webRequest.onBeforeSendHeaders.removeListener(replaceHeadersFunction);
+	extensionTab = chrome.tabs.create({
 		url: "/index.html"
+	}, (tab) => {
+		chrome.webRequest.onBeforeSendHeaders.addListener(replaceHeadersFunction,
+			{ urls:["*://*/*"],
+				tabId: tab.id},
+			["blocking", "requestHeaders"]
+		);
 	});
 });
 
-
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
-		const url = `data:application/json;base64,${btoa(request.state)}`;
-		chrome.downloads.download({
-			url,
-			filename: "graphiqlfeen.json"
-		});
-		sendResponse({farewell: "goodbye"});
+		const bkp = chrome.extension.getBackgroundPage();
+		if (request.type === "DOWNLOAD") {
+			bkp.console.log("Received request to download state");
+			const url = `data:application/json;base64,${btoa(request.state)}`;
+			chrome.downloads.download({
+				url,
+				filename: "graphiqlfeen.json"
+			});
+			sendResponse({response: "ok"});
+		} else if (request.type === "SERVER") {
+			bkp.console.log(`Received request to update currentServer=${request.currentServer} currentServerJSON = ${JSON.stringify(request.currentServer)} `);
+			currentServer = request.currentServer;
+		}
 	});
-//
-// chrome.webRequest.onBeforeSendHeaders.addListener(
-// 	function (details) {
-// 		const bkp = chrome.extension.getBackgroundPage();
-// 		bkp.console.log(`${JSON.stringify(details.requestHeaders)}`);
-// 		for (let i = 0; i < details.requestHeaders.length; ++i) {
-//
-// 			if (details.requestHeaders[i].name === "Origin") {
-// 				details.requestHeaders.splice(i, 1);
-// 				break;
-// 			}
-// 		}
-// 		return {requestHeaders: details.requestHeaders};
-// 	},
-// 	{urls: ["*://*/*"]},
-// 	["blocking", "requestHeaders"]
-// );

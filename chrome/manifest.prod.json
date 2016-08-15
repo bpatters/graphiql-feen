@@ -16,7 +16,10 @@
 	},
   "permissions": [
 		"storage",
-		"downloads"
+		"downloads",
+		"webRequest",
+		"webRequestBlocking",
+		"*://*/*"
 	],
   "content_security_policy": "connect-src *; default-src 'self'; script-src 'self';font-src *; style-src * 'unsafe-inline'; img-src 'self' data:;"
 }
