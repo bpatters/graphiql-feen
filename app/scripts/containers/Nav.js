@@ -61,6 +61,11 @@ class Nav extends Component {
 		updateBackgroundServer(this.props.state.currentServer);
 	};
 
+	onResetAll = () => {
+		/*eslint no-undef:0*/
+		chrome.storage.local.clear();
+	};
+
 	render() {
 		return (
 			<AppBar
@@ -76,6 +81,8 @@ class Nav extends Component {
 					>
 						<MenuItem primaryText="Import" onClick={this.onImport}/>
 						<MenuItem primaryText="Export" onClick={this.onExport}/>
+						<Divider/>
+						<MenuItem primaryText="Erase All Data" onClick={this.onResetAll}/>
 						<Divider/>
 						<MenuItem primaryText="About"/>
 					</IconMenu>}

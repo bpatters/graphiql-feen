@@ -20,7 +20,9 @@ const initialState = new SettingsRecord();
 const reducer = handleActions({
 	[SAVE_CURRENT_SERVER]: (state) => {
 		return state.withMutations(newState => {
-			return newState.setIn(["servers"], newState.servers.unshift(state.currentServer));
+			const newEntry = {};
+			newEntry[state.currentServer.url] = state.currentServer;
+			return newState.setIn(["servers"], newState.servers.merge(new Map(newEntry)));
 		});
 	},
 	[DELETE_CURRENT_SERVER]: (state, action) => {

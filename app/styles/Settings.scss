@@ -16,11 +16,12 @@
 	flex-wrap: nowrap;
 	flex-grow:1;
 	width:100%;
+	min-height:75px;
 }
 .serverUrl {
 	display:flex;
 	align-self:flex-end;
-	flex-grow:3;
+	flex-grow:1;
 }
 
 .serverMethod {

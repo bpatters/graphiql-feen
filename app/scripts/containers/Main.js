@@ -152,7 +152,7 @@ class Main extends Component {
 								{this.renderGraphIQL()}
 							</div>
 						</Tab>
-						<Tab label="Settings">
+						<Tab label="Servers">
 							<Settings/>
 						</Tab>
 					</Tabs>
