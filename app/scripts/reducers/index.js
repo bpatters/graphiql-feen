@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import queries from "./queries";
 import navstate from "./navstate";
-import settings from "./settings";
+import {reducer as settings} from "./settings";
 
 const reducers = {
 	queries,

@@ -10,7 +10,7 @@ import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import * as NavStateActions from "actions/NavStateActions";
 import IconButton from "material-ui/IconButton";
 import Settings from "containers/Settings";
-import ServerRecord from "records/ServerRecord";
+import {ServerRecord, GET, POST} from "records/ServerRecord";
 
 import {
 	shouldComponentUpdate
@@ -39,7 +39,47 @@ class Main extends Component {
 
 	shouldComponentUpdate = shouldComponentUpdate;
 
-	graphQLFetcher = (data) => {
+	graphQLFetcher     = (data) => {
+		if (this.props.currentServer.method === GET) {
+			return this.graphQLGetFetcher(data);
+		}
+		if (this.props.currentServer.method === POST) {
+			return this.graphQLPostFetcher(data);
+		}
+
+		return this.graphQLMultiPartFetcher(data);
+	};
+	graphQLGetFetcher  = (data) => {
+		return fetch(`${this.props.currentServer.url}?query=${data.query}&variables=${data.variables}`, {
+			method     : "get",
+			credentials: "include",
+			headers    : this.props.currentServer.headers.toObject()
+		}).then((res) => {
+			if (res.status === 200) {
+				return res.json().then((json) => {
+					return json;
+				});
+			}
+			return res;
+		});
+	};
+	graphQLPostFetcher = (data) => {
+		return fetch(this.props.currentServer.url, {
+			method     : "POST",
+			credentials: "include",
+			headers    : this.props.currentServer.headers.toObject(),
+			body       : JSON.stringify({query: data.query, variables: JSON.stringify(data.variables)})
+		}).then((res) => {
+			if (res.status === 200) {
+				return res.json().then((json) => {
+					return json;
+				});
+			}
+			return res;
+		});
+	};
+
+	graphQLMultiPartFetcher = (data) => {
 		const formData = new FormData();
 		formData.append("query", data.query);
 		formData.append("variables", data.variables);

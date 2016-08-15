@@ -3,7 +3,7 @@
 
 const bluebird = require("bluebird");
 global.Promise = bluebird;
-import ServerRecord from "scripts/records/ServerRecord";
+import {ServerRecord} from "scripts/records/ServerRecord";
 
 let currentServer = new ServerRecord();
 function promisifier(method) {
@@ -47,12 +47,14 @@ const replaceHeadersFunction = function (details) {
 
 chrome.browserAction.onClicked.addListener(() => {
 	chrome.webRequest.onBeforeSendHeaders.removeListener(replaceHeadersFunction);
-	extensionTab = chrome.tabs.create({
+	chrome.tabs.create({
 		url: "/index.html"
 	}, (tab) => {
 		chrome.webRequest.onBeforeSendHeaders.addListener(replaceHeadersFunction,
-			{ urls:["*://*/*"],
-				tabId: tab.id},
+			{
+				urls : ["*://*/*"],
+				tabId: tab.id
+			},
 			["blocking", "requestHeaders"]
 		);
 	});

@@ -1,7 +1,12 @@
 import {Map, Record} from "immutable";
 
-export default new Record(
+const GET = "GET";
+const POST = "POST";
+const MULTIPART = "MULTIPART";
+
+const ServerRecord = new Record(
 	{
+		method : MULTIPART,
 		url    : "",
 		headers: new Map(),
 		cookies: new Map(),
@@ -9,3 +14,5 @@ export default new Record(
 	},
 	"Server"
 );
+
+export {ServerRecord, GET, POST, MULTIPART };

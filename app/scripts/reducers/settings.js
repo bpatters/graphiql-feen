@@ -10,22 +10,14 @@ import {
 	DELETE_SERVER_HEADER,
 	ADD_SERVER_COOKIE,
 	DELETE_SERVER_COOKIE,
-	SELECT_SERVER
+	SET_SERVER_METHOD,
+	SELECT_SERVER,
+	updateBackgroundServer
 } from "actions/SettingsActions";
 
 const initialState = new SettingsRecord();
 
-const updateBackgroundServer = (server) => {
-	const message = {
-		type: "SERVER",
-		currentServer: server
-	};
-	/*eslint no-undef:0*/
-	chrome.runtime.sendMessage(message, function () {
-	});
-};
-
-export default  handleActions({
+const reducer = handleActions({
 	[SAVE_CURRENT_SERVER]: (state) => {
 		return state.withMutations(newState => {
 			return newState.setIn(["servers"], newState.servers.unshift(state.currentServer));
@@ -69,9 +61,18 @@ export default  handleActions({
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	},
+	[SET_SERVER_METHOD]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
+			return newState.set("method", action.payload.method);
+		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
+	},
 	[SELECT_SERVER]: (state, action) => {
 		const rv = state.set("currentServer", action.payload.server);
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	}
 }, initialState);
+
+export {reducer, updateBackgroundServer};

@@ -16,9 +16,8 @@
 	},
 	"permissions": [
 		"storage",
-		"downloads"
-	],
-	"optional_permissions" : [
+		"downloads",
+		"webRequest",
 		"webRequestBlocking",
 		"*://*/*"
 	],

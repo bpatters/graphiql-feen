@@ -18,14 +18,7 @@ This is a Chrome Extension that allows you to explore and test GraphQL endpoints
   - Currently JSON format uses transit-immutables to serialize/deserialize the Immutable program state.
 
 # Limitations
-- Currently requires your server to accept GraphQL requests in POST with multi-part form data with parts:
-  - query
-  - variables
 - Elevated permissions are required for header modifications -- Soon to be optional.
-
-
-Get Requests and Post support for body of application/json coming soon.
-
 
 # Getting started
 
@@ -35,7 +28,6 @@ npm run build
 ```
 
 In chrome extensions use load unpacked extension and point it to the build directory.
-
 
 ## Development build
 

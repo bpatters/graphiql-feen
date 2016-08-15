@@ -6,6 +6,9 @@ import * as SettingsActions from "actions/SettingsActions";
 import KeyValueView from "components/KeyValueView";
 import RaisedButton from "material-ui/RaisedButton";
 import Immutable from "immutable";
+import DropDownMenu from "material-ui/DropDownMenu";
+import MenuItem from "material-ui/MenuItem";
+import {GET, POST, MULTIPART} from "scripts/records/ServerRecord";
 
 import {
 	shouldComponentUpdate
@@ -75,19 +78,32 @@ class Settings extends Component {
 		}
 	};
 
+	onMethodChange = (event, index, value) => {
+		this.props.dispatch(SettingsActions.setServerMethod(value));
+	};
 
 	render() {
 		return (
 			<div className={styles.settings}>
-				<AutoComplete
-					floatingLabelText="Server Url"
-					dataSource={this.urlDataSource()}
-					onUpdateInput={this.onUpdateInput}
-					fullWidth
-					onNewRequest={this.onServerSelected}
-					searchText={this.props.currentServer.url}/>
-				<div style={{display: "none", alignSelf: "center", margin: "15px 0 0 10px"}}>
-					<RaisedButton label="Save" onClick={this.onSaveServer}/>
+				<div className={styles.serverDef}>
+					<DropDownMenu
+						className={styles.serverMethod}
+						value={this.props.currentServer.method}
+						onChange={this.onMethodChange}>
+						<MenuItem value={GET} primaryText={GET}/>
+						<MenuItem value={POST} primaryText={POST}/>
+						<MenuItem value={MULTIPART} primaryText={MULTIPART}/>
+					</DropDownMenu>
+					<AutoComplete className={styles.serverUrl}
+						floatingLabelText="Server Url"
+						dataSource={this.urlDataSource()}
+						onUpdateInput={this.onUpdateInput}
+						fullWidth
+						onNewRequest={this.onServerSelected}
+						searchText={this.props.currentServer.url}/>
+					<div style={{display: "none", alignSelf: "center", margin: "15px 0 0 10px"}}>
+						<RaisedButton label="Save" onClick={this.onSaveServer}/>
+					</div>
 				</div>
 
 				<div className={styles.tables}>

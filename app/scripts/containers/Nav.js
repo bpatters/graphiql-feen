@@ -10,6 +10,7 @@ import * as NavStateActions from "actions/NavStateActions";
 import * as StateSerialization from "scripts/utils/serialization";
 import {IMPORT_STATE} from "scripts/utils/importableState";
 import HiddenFileDrop from "components/HiddenFileDrop";
+import {updateBackgroundServer} from "actions/SettingsActions";
 
 import {
 	shouldComponentUpdate
@@ -57,6 +58,7 @@ class Nav extends Component {
 			type: IMPORT_STATE,
 			state: StateSerialization.stateFromJSON(newState)
 		});
+		updateBackgroundServer(this.props.state.currentServer);
 	};
 
 	render() {
