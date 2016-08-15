@@ -50,10 +50,11 @@ class Main extends Component {
 		return this.graphQLMultiPartFetcher(data);
 	};
 	graphQLGetFetcher  = (data) => {
+		const headers = this.props.currentServer.headers.toObject();
 		return fetch(`${this.props.currentServer.url}?query=${data.query}&variables=${data.variables}`, {
 			method     : "get",
 			credentials: "include",
-			headers    : this.props.currentServer.headers.toObject()
+			headers
 		}).then((res) => {
 			if (res.status === 200) {
 				return res.json().then((json) => {
@@ -64,10 +65,14 @@ class Main extends Component {
 		});
 	};
 	graphQLPostFetcher = (data) => {
+		const headers = this.props.currentServer.headers.toObject();
+		if (!headers.hasOwnProperty("Content-Type")) {
+			headers["Content-Type"] = "application/json;charset=utf-8";
+		}
 		return fetch(this.props.currentServer.url, {
 			method     : "POST",
 			credentials: "include",
-			headers    : this.props.currentServer.headers.toObject(),
+			headers,
 			body       : JSON.stringify({query: data.query, variables: JSON.stringify(data.variables)})
 		}).then((res) => {
 			if (res.status === 200) {
