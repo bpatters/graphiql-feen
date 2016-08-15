@@ -73,7 +73,7 @@ class Main extends Component {
 			method     : "POST",
 			credentials: "include",
 			headers,
-			body       : JSON.stringify({query: data.query, variables: JSON.stringify(data.variables)})
+			body       : JSON.stringify({query: data.query, variables: data.variables})
 		}).then((res) => {
 			if (res.status === 200) {
 				return res.json().then((json) => {
