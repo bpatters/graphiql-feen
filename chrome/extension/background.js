@@ -33,13 +33,13 @@ promisifyAll(chrome.storage, [
 ]);
 
 const replaceHeadersFunction = function (details) {
-	const bkp = chrome.extension.getBackgroundPage();
-	bkp.console.log(`${JSON.stringify(details.requestHeaders)}`);
+//	const bkp = chrome.extension.getBackgroundPage();
+	//bkp.console.log(`${JSON.stringify(details.requestHeaders)}`);
 	for (let i = 0; i < details.requestHeaders.length; ++i) {
 		const name = details.requestHeaders[i].name;
 		if (currentServer.headers.hasOwnProperty(name)) {
 			details.requestHeaders[i].value = currentServer.headers[name];
-			bkp.console.log(`Setting header ${name} = ${currentServer.headers[name]}`);
+		//	bkp.console.log(`Setting header ${name} = ${currentServer.headers[name]}`);
 		}
 	}
 	return {requestHeaders: details.requestHeaders};
@@ -62,9 +62,9 @@ chrome.browserAction.onClicked.addListener(() => {
 
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
-		const bkp = chrome.extension.getBackgroundPage();
+		//const bkp = chrome.extension.getBackgroundPage();
 		if (request.type === "DOWNLOAD") {
-			bkp.console.log("Received request to download state");
+			//bkp.console.log("Received request to download state");
 			const url = `data:application/json;base64,${btoa(request.state)}`;
 			chrome.downloads.download({
 				url,
@@ -72,7 +72,7 @@ chrome.runtime.onMessage.addListener(
 			});
 			sendResponse({response: "ok"});
 		} else if (request.type === "SERVER") {
-			bkp.console.log(`Received request to update currentServer=${request.currentServer} currentServerJSON = ${JSON.stringify(request.currentServer)} `);
+			//bkp.console.log(`Received request to update currentServer=${request.currentServer} currentServerJSON = ${JSON.stringify(request.currentServer)} `);
 			currentServer = request.currentServer;
 		}
 	});
