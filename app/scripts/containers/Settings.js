@@ -5,7 +5,10 @@ import AutoComplete from "material-ui/AutoComplete";
 import * as SettingsActions from "actions/SettingsActions";
 import KeyValueView from "components/KeyValueView";
 import RaisedButton from "material-ui/RaisedButton";
-import Immutable from "immutable";
+import {Map as ImmutableMap} from "immutable";
+import DropDownMenu from "material-ui/DropDownMenu";
+import MenuItem from "material-ui/MenuItem";
+import {GET, POST, MULTIPART} from "scripts/records/ServerRecord";
 
 import {
 	shouldComponentUpdate
@@ -26,7 +29,7 @@ class Settings extends Component {
 		settings     : PropTypes.object.isRequired,
 		dispatch     : PropTypes.func.isRequired,
 		currentServer: PropTypes.object.isRequired,
-		servers      : PropTypes.instanceOf(Immutable.List)
+		servers      : PropTypes.instanceOf(ImmutableMap)
 	};
 	static defaultProps = {};
 
@@ -34,7 +37,7 @@ class Settings extends Component {
 
 	urlDataSource = () => {
 		return this.props.settings.servers.map(server => {
-			return server.url;
+			return {text: server.url, value: server};
 		}).toArray();
 	};
 
@@ -61,33 +64,39 @@ class Settings extends Component {
 		this.props.dispatch(SettingsActions.saveCurrentServer());
 	};
 
-	onServerSelected = (chosenRequest, index) => {
-		let serverIndex = index;
-
-		if (chosenRequest) {
-			serverIndex = this.props.servers.findKey((server) => {
-				return server.url === chosenRequest;
-			});
-		}
-
-		if (serverIndex > 0 && serverIndex < this.props.servers.size) {
-			this.props.dispatch(SettingsActions.selectServer(this.props.servers.get(serverIndex)));
+	onServerSelected = (chosenRequest) => {
+		if (this.props.servers.has(chosenRequest.text)) {
+			this.props.dispatch(SettingsActions.selectServer(this.props.servers.get(chosenRequest.text)));
 		}
 	};
 
+	onMethodChange = (event, index, value) => {
+		this.props.dispatch(SettingsActions.setServerMethod(value));
+	};
 
 	render() {
 		return (
 			<div className={styles.settings}>
-				<AutoComplete
-					floatingLabelText="Server Url"
-					dataSource={this.urlDataSource()}
-					onUpdateInput={this.onUpdateInput}
-					fullWidth
-					onNewRequest={this.onServerSelected}
-					searchText={this.props.currentServer.url}/>
-				<div style={{display: "none", alignSelf: "center", margin: "15px 0 0 10px"}}>
-					<RaisedButton label="Save" onClick={this.onSaveServer}/>
+				<div className={styles.serverDef}>
+					<DropDownMenu
+						className={styles.serverMethod}
+						value={this.props.currentServer.method}
+						onChange={this.onMethodChange}>
+						<MenuItem value={GET} primaryText={GET}/>
+						<MenuItem value={POST} primaryText={POST}/>
+						<MenuItem value={MULTIPART} primaryText={MULTIPART}/>
+					</DropDownMenu>
+					<AutoComplete className={styles.serverUrl}
+												floatingLabelText="Server Url"
+												dataSource={this.urlDataSource()}
+												onUpdateInput={this.onUpdateInput}
+												fullWidth
+												openOnFocus
+												onNewRequest={this.onServerSelected}
+												searchText={this.props.currentServer.url}/>
+					<div style={{alignSelf: "center", margin: "15px 0 0 10px"}}>
+						<RaisedButton label="Save" onClick={this.onSaveServer}/>
+					</div>
 				</div>
 
 				<div className={styles.tables}>

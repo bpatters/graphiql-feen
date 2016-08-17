@@ -36,10 +36,10 @@
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-react-constant-elements": "^6.5.0",
     "babel-plugin-transform-runtime": "^6.5.2",
+    "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
-    "babel-polyfill": "^6.9.1",
     "babel-runtime": "^6.5.0",
     "chai": "^3.2.0",
     "chromedriver": "^2.19.0",
@@ -48,14 +48,15 @@
     "crx": "^3.0.3",
     "css-loader": "^0.23.1",
     "eslint": "^2.5.3",
-		"eslint-plugin-disallow-methods": "~0.1.0",
-		"eslint-plugin-extra-rules": "~0.6.1",
-		"eslint-plugin-immutablejs": "~0.1.3",
+    "eslint-plugin-disallow-methods": "~0.1.0",
+    "eslint-plugin-extra-rules": "~0.6.1",
+    "eslint-plugin-immutablejs": "~0.1.3",
     "eslint-plugin-react": "^5.0.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "jsdom": "^9.2.1",
     "minimist": "^1.2.0",
     "mocha": "^2.4.5",
+    "node-sass": "^3.8.0",
     "postcss-loader": "^0.9.1",
     "react-addons-test-utils": "^15.0.2",
     "react-transform-catch-errors": "^1.0.2",
@@ -68,8 +69,8 @@
     "sinon": "^1.17.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0",
-    "webpack-httpolyglot-server": "^0.2.0",
-    "webpack-hot-middleware": "^2.10.0"
+    "webpack-hot-middleware": "^2.10.0",
+    "webpack-httpolyglot-server": "^0.2.0"
   },
   "dependencies": {
     "babel-runtime": "^6.3.19",
@@ -78,6 +79,7 @@
     "graphiql": "^0.7.4",
     "graphql": "^0.6.2",
     "immutable": "^3.7.5",
+    "lodash": "^4.14.1",
     "material-ui": "^0.15.4",
     "react": "^15.3.0",
     "react-addons-perf": "^15.3.0",
@@ -92,7 +94,8 @@
     "redux-batched-subscribe": "^0.1.4",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
-    "whatwg-fetch": "~0.11.0",
-		"lodash": "^4.14.1"
+    "transit-immutable-js": "^0.6.0",
+    "transit-js": "^0.8.846",
+    "whatwg-fetch": "~0.11.0"
   }
 }

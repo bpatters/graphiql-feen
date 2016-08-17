@@ -10,6 +10,7 @@ import * as NavStateActions from "actions/NavStateActions";
 import * as StateSerialization from "scripts/utils/serialization";
 import {IMPORT_STATE} from "scripts/utils/importableState";
 import HiddenFileDrop from "components/HiddenFileDrop";
+import {updateBackgroundServer} from "actions/SettingsActions";
 
 import {
 	shouldComponentUpdate
@@ -39,7 +40,10 @@ class Nav extends Component {
 	};
 
 	onExport = () => {
-		const message = {state: StateSerialization.stateToJSON(this.props.state)};
+		const message = {
+			type: "DOWNLOAD",
+			state: StateSerialization.stateToJSON(this.props.state)
+		};
 		/*eslint no-undef:0*/
 		chrome.runtime.sendMessage(message, function() {
 		});
@@ -54,6 +58,12 @@ class Nav extends Component {
 			type: IMPORT_STATE,
 			state: StateSerialization.stateFromJSON(newState)
 		});
+		updateBackgroundServer(this.props.state.currentServer);
+	};
+
+	onResetAll = () => {
+		/*eslint no-undef:0*/
+		chrome.storage.local.clear();
 	};
 
 	render() {
@@ -71,6 +81,8 @@ class Nav extends Component {
 					>
 						<MenuItem primaryText="Import" onClick={this.onImport}/>
 						<MenuItem primaryText="Export" onClick={this.onExport}/>
+						<Divider/>
+						<MenuItem primaryText="Erase All Data" onClick={this.onResetAll}/>
 						<Divider/>
 						<MenuItem primaryText="About"/>
 					</IconMenu>}

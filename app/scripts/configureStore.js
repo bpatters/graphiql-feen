@@ -1,18 +1,20 @@
 import { batchedSubscribe } from "redux-batched-subscribe";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
-import createLogger from "redux-logger";
+//import createLogger from "redux-logger";
 import rootReducer from "reducers";
 import storage from "scripts/utils/storage";
 import {IMPORT_STATE, makeImportable} from "scripts/utils/importableState";
 /*eslint camelcase:0 */
 import { unstable_batchedUpdates as batchedUpdates } from "react-dom";
 
-const loggerMiddleware = createLogger();
+//const loggerMiddleware = createLogger();
 
 export default function (initialState) {
 	const finalCreateStore = compose(
-		applyMiddleware(thunkMiddleware, loggerMiddleware),
+		applyMiddleware(thunkMiddleware
+			//, loggerMiddleware
+		),
 		storage(),
 		batchedSubscribe(batchedUpdates)
 	)(createStore);

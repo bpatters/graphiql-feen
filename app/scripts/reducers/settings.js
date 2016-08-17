@@ -10,15 +10,19 @@ import {
 	DELETE_SERVER_HEADER,
 	ADD_SERVER_COOKIE,
 	DELETE_SERVER_COOKIE,
-	SELECT_SERVER
+	SET_SERVER_METHOD,
+	SELECT_SERVER,
+	updateBackgroundServer
 } from "actions/SettingsActions";
 
 const initialState = new SettingsRecord();
 
-export default  handleActions({
-	[SAVE_CURRENT_SERVER]  : (state) => {
+const reducer = handleActions({
+	[SAVE_CURRENT_SERVER]: (state) => {
 		return state.withMutations(newState => {
-			return newState.setIn(["servers"], newState.servers.unshift(state.currentServer));
+			const newEntry = {};
+			newEntry[state.currentServer.url] = state.currentServer;
+			return newState.setIn(["servers"], newState.servers.merge(new Map(newEntry)));
 		});
 	},
 	[DELETE_CURRENT_SERVER]: (state, action) => {
@@ -26,32 +30,51 @@ export default  handleActions({
 			return newState.setIn(["servers"], newState.servers.delete(action.payload.index));
 		});
 	},
-	[SAVE_SERVER_URL]      : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[SAVE_SERVER_URL]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.set("url", action.payload.url);
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[ADD_SERVER_HEADER]    : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[ADD_SERVER_HEADER]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.mergeIn(["headers"], new Map(action.payload.header));
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[DELETE_SERVER_HEADER] : (state, action) => {
+	[DELETE_SERVER_HEADER]: (state, action) => {
 		return state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.deleteIn(["headers"], action.payload.key);
+			return newState.setIn(["headers"], newState.headers.delete(action.payload.key));
 		}));
 	},
-	[ADD_SERVER_COOKIE]    : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[ADD_SERVER_COOKIE]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.mergeIn(["cookies"], new Map(action.payload.cookie));
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[DELETE_SERVER_COOKIE] : (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
+	[DELETE_SERVER_COOKIE]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
 			return newState.deleteIn(["cookies"], action.payload.key);
 		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	},
-	[SELECT_SERVER]        : (state, action) => {
-		return state.set("currentServer", action.payload.server);
+	[SET_SERVER_METHOD]: (state, action) => {
+		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
+			return newState.set("method", action.payload.method);
+		}));
+		updateBackgroundServer(rv.currentServer);
+		return rv;
+	},
+	[SELECT_SERVER]: (state, action) => {
+		const rv = state.set("currentServer", action.payload.server);
+		updateBackgroundServer(rv.currentServer);
+		return rv;
 	}
 }, initialState);
+
+export {reducer, updateBackgroundServer};
