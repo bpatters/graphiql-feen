@@ -3,7 +3,7 @@
 
 const bluebird = require("bluebird");
 global.Promise = bluebird;
-import {ServerRecord} from "scripts/records/ServerRecord";
+import {ServerRecord} from "scripts/model/ServerRecord";
 
 let currentServer = new ServerRecord();
 function promisifier(method) {

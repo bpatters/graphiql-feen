@@ -6,7 +6,7 @@ import Paper from "material-ui/Paper";
 import CloseIcon from "material-ui/svg-icons/navigation/close";
 import IconButton from "material-ui/IconButton";
 import {List, ListItem} from "material-ui/List";
-import lodash from "lodash";
+import map from "lodash/map";
 
 class KeyValueView extends Component {
 	static displayName = "KeyValueView";
@@ -47,7 +47,7 @@ class KeyValueView extends Component {
 	};
 
 	renderHeaderTableRows = () => {
-		return lodash.map(this.props.keyValueMap, (value, key) => {
+		return map(this.props.keyValueMap, (value, key) => {
 			return (
 				<ListItem key={`key-${key}`} primaryText={`${key} = ${value}`}
 									rightIconButton={<IconButton onClick={this.onDeleteKeyPrivate(key)}><CloseIcon/></IconButton>}/>

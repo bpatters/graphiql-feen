@@ -1,5 +1,5 @@
 import {handleActions} from "redux-actions";
-import NavStateRecord from "records/NavStateRecord";
+import NavStateRecord from "model/NavStateRecord";
 
 import {
 	NAVSTATE_TOGGLE_LEFT_PANEL
@@ -9,6 +9,6 @@ const initialState = new NavStateRecord();
 
 export default  handleActions({
 	[NAVSTATE_TOGGLE_LEFT_PANEL]: (state) => {
-		return state.set("leftPanelOpen", !state.leftPanelOpen);
+		return state.merge({leftPanelOpen : !state.leftPanelOpen});
 	}
 }, initialState);

@@ -5,14 +5,10 @@ import AutoComplete from "material-ui/AutoComplete";
 import * as SettingsActions from "actions/SettingsActions";
 import KeyValueView from "components/KeyValueView";
 import RaisedButton from "material-ui/RaisedButton";
-import {Map as ImmutableMap} from "immutable";
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
-import {GET, POST, MULTIPART} from "scripts/records/ServerRecord";
-
-import {
-	shouldComponentUpdate
-} from "react-immutable-render-mixin";
+import {GET, POST, MULTIPART} from "scripts/model/ServerRecord";
+import map from "lodash/map";
 
 function mapStateToProps(state) {
 	return {
@@ -29,16 +25,15 @@ class Settings extends Component {
 		settings     : PropTypes.object.isRequired,
 		dispatch     : PropTypes.func.isRequired,
 		currentServer: PropTypes.object.isRequired,
-		servers      : PropTypes.instanceOf(ImmutableMap)
+		servers      : PropTypes.object
 	};
 	static defaultProps = {};
 
-	shouldComponentUpdate = shouldComponentUpdate;
 
 	urlDataSource = () => {
-		return this.props.settings.servers.map(server => {
+		return map(this.props.settings.servers, server => {
 			return {text: server.url, value: server};
-		}).toArray();
+		});
 	};
 
 	onUpdateInput = (value) => {
@@ -65,8 +60,8 @@ class Settings extends Component {
 	};
 
 	onServerSelected = (chosenRequest) => {
-		if (this.props.servers.has(chosenRequest.text)) {
-			this.props.dispatch(SettingsActions.selectServer(this.props.servers.get(chosenRequest.text)));
+		if (this.props.servers[chosenRequest.text]) {
+			this.props.dispatch(SettingsActions.selectServer(this.props.servers[chosenRequest.text]));
 		}
 	};
 
@@ -104,7 +99,7 @@ class Settings extends Component {
 						addLabel="Add Header"
 						keyLabel="Header Name"
 						valueLabel="Header Value"
-						keyValueMap={this.props.currentServer.headers.toObject()}
+						keyValueMap={this.props.currentServer.headers}
 						onDeleteKey={this.onDeleteHeader}
 						onAddKeyValue={this.addHeader}
 					/>

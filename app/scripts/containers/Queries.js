@@ -9,14 +9,7 @@ import TextField from "material-ui/TextField";
 import * as QueryActions from "actions/QueryActions";
 import ActionInfo from "material-ui/svg-icons/action/delete-forever";
 import CloseIcon from "material-ui/svg-icons/navigation/close";
-import Immutable from "immutable";
-import QueryRecord from "scripts/records/QueryRecord";
-
-
-import {
-	shouldComponentUpdate
-} from "react-immutable-render-mixin";
-
+import findKey from "lodash/findKey";
 
 function mapStateToProps(state) {
 	return {
@@ -30,24 +23,25 @@ class Queries extends Component {
 	static propTypes   = {
 		onClose     : PropTypes.func,
 		dispatch    : PropTypes.func,
-		queries     : PropTypes.instanceOf(Immutable.List),
-		currentQuery: PropTypes.instanceOf(QueryRecord)
+		queries     : PropTypes.array,
+		currentQuery: PropTypes.object
 	};
 
 	static defaultProps = {};
 
-	shouldComponentUpdate = shouldComponentUpdate;
-
 	onQueryDelete = (index) => {
 
-		return () => {
+		return (event) => {
+			event.preventDefault();
+			event.stopPropagation();
 			this.props.dispatch(QueryActions.deleteQuery(index));
+			this.props.dispatch(QueryActions.updateCurrentQuery({name: ""}));
 		};
 	};
 	onQuerySelect = (index) => {
 
 		return () => {
-			this.props.dispatch(QueryActions.updateCurrentQuery(this.props.queries.get(index).toObject()));
+			this.props.dispatch(QueryActions.updateCurrentQuery(this.props.queries[index]));
 		};
 	};
 
@@ -73,7 +67,6 @@ class Queries extends Component {
 
 		const action = () => {
 			this.props.dispatch(QueryActions.saveCurrentQuery());
-			this.props.dispatch(QueryActions.updateCurrentQuery({name: ""}));
 		};
 		if (typeof index === "undefined") {
 			action();
@@ -84,7 +77,7 @@ class Queries extends Component {
 	};
 
 	queryWithNameIndex = () => {
-		return this.props.queries.findKey((query) => {
+		return findKey(this.props.queries, (query) => {
 			return query.name === this.props.currentQuery.name;
 		});
 	};

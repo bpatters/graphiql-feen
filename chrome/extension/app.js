@@ -5,27 +5,38 @@ import Root from "scripts/bootstrap.js";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import createStore from "scripts/configureStore";
-import * as StateSerialization from "scripts/utils/serialization";
+import {loadState, loadPreviousVersionState} from "scripts/utils/serialization";
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-chrome.storage.local.get("state", obj => {
-	const {state} = obj || {};
-//let state           = localStorage.getItem("state");
-	const initialState = StateSerialization.stateFromJSON(state);
-	let store;
-	if (initialState) {
-		store = createStore(initialState);
-	} else {
-		store = createStore();
-	}
+loadState(state => {
+	const go = (initialState) => {
+		let store;
+		if (initialState) {
+			console.log(`initial state: ${JSON.stringify(initialState)}`);
+			store = createStore(initialState);
+		} else {
+			store = createStore();
+		}
 
-	ReactDOM.render(
-		<MuiThemeProvider>
-			<Root store={store}/>
-		</MuiThemeProvider>,
-		document.querySelector("#root")
-	);
+		ReactDOM.render(
+			<MuiThemeProvider>
+				<Root store={store}/>
+			</MuiThemeProvider>,
+			document.querySelector("#root")
+		);
+	};
+
+	// if new state format is null attempt to load old format
+	if (state) {
+		console.log("Success loading current version state");
+		return go(state);
+	} else {
+		console.log("Loading previous version state");
+		return loadPreviousVersionState((state) => {
+			return go(state);
+		})
+	}
 });

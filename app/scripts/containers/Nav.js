@@ -12,10 +12,6 @@ import {IMPORT_STATE} from "scripts/utils/importableState";
 import HiddenFileDrop from "components/HiddenFileDrop";
 import {updateBackgroundServer} from "actions/SettingsActions";
 
-import {
-	shouldComponentUpdate
-} from "react-immutable-render-mixin";
-
 function mapStateToProps(state) {
 	return {
 		state
@@ -33,8 +29,6 @@ class Nav extends Component {
 
 	state = {};
 
-	shouldComponentUpdate = shouldComponentUpdate;
-
 	openLeftPanel = () => {
 		this.props.dispatch(NavStateActions.toggleLeftPanel());
 	};
@@ -42,7 +36,7 @@ class Nav extends Component {
 	onExport = () => {
 		const message = {
 			type: "DOWNLOAD",
-			state: StateSerialization.stateToJSON(this.props.state)
+			state: JSON.stringify(this.props.state)
 		};
 		/*eslint no-undef:0*/
 		chrome.runtime.sendMessage(message, function() {
@@ -54,11 +48,18 @@ class Nav extends Component {
 	};
 
 	onImportFile = (newState) => {
-		this.props.dispatch({
+
+		chrome.storage.local.set(
+			{
+				state:newState
+			}
+		);
+/*		this.props.dispatch({
 			type: IMPORT_STATE,
-			state: StateSerialization.stateFromJSON(newState)
+			state: JSON.parse(newState)
 		});
 		updateBackgroundServer(this.props.state.currentServer);
+		*/
 	};
 
 	onResetAll = () => {

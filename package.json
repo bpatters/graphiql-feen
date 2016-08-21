@@ -79,7 +79,9 @@
     "graphiql": "^0.7.4",
     "graphql": "^0.6.2",
     "immutable": "^3.7.5",
-    "lodash": "^4.14.1",
+    "lodash/map": "^4.14.1",
+		"lodash/filter": "^4.14.1",
+		"lodash/findKey": "^4.14.1",
     "material-ui": "^0.15.4",
     "react": "^15.3.0",
     "react-addons-perf": "^15.3.0",
@@ -94,6 +96,7 @@
     "redux-batched-subscribe": "^0.1.4",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
+    "seamless-immutable": "^6.1.1",
     "transit-immutable-js": "^0.6.0",
     "transit-js": "^0.8.846",
     "whatwg-fetch": "~0.11.0"

@@ -1,6 +1,5 @@
 import {handleActions} from "redux-actions";
-import SettingsRecord from "records/SettingsRecord";
-import {Map} from "immutable";
+import SettingsRecord from "model/SettingsRecord";
 
 import {
 	SAVE_CURRENT_SERVER,
@@ -18,60 +17,68 @@ import {
 const initialState = new SettingsRecord();
 
 const reducer = handleActions({
-	[SAVE_CURRENT_SERVER]: (state) => {
-		return state.withMutations(newState => {
-			const newEntry = {};
-			newEntry[state.currentServer.url] = state.currentServer;
-			return newState.setIn(["servers"], newState.servers.merge(new Map(newEntry)));
-		});
+	[SAVE_CURRENT_SERVER]  : (state) => {
+		const newEntry                    = {};
+		newEntry[state.currentServer.url] = state.currentServer;
+		return state.merge({servers: state.servers.merge(newEntry)});
 	},
 	[DELETE_CURRENT_SERVER]: (state, action) => {
-		return state.withMutations(newState => {
-			return newState.setIn(["servers"], newState.servers.delete(action.payload.index));
+		return state.merge({servers: state.servers.delete(action.payload.index)});
+	},
+	[SAVE_SERVER_URL]      : (state, action) => {
+		const rv = state.merge({
+			currentServer: state.currentServer.merge({
+				"url": action.payload.url
+			})
+		});
+		updateBackgroundServer(rv.currentServer);
+		return rv;
+	},
+	[ADD_SERVER_HEADER]    : (state, action) => {
+		const rv = state.merge({
+			currentServer: state.currentServer.merge({
+				headers: state.currentServer.headers.merge(action.payload.header)
+			})
+		});
+		updateBackgroundServer(rv.currentServer);
+		return rv;
+	},
+	[DELETE_SERVER_HEADER] : (state, action) => {
+		return state.merge({
+			currentServer: state.currentServer.merge({
+				headers: state.currentServer.headers.without(action.payload.key)
+			})
 		});
 	},
-	[SAVE_SERVER_URL]: (state, action) => {
-		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.set("url", action.payload.url);
-		}));
+	[ADD_SERVER_COOKIE]    : (state, action) => {
+		const rv = state.merge({
+			currentServer: state.currentServer.merge({
+				cookies: state.currentServer.cookies.merge(action.payload.cookie)
+			})
+		});
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	},
-	[ADD_SERVER_HEADER]: (state, action) => {
-		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.mergeIn(["headers"], new Map(action.payload.header));
-		}));
+	[DELETE_SERVER_COOKIE] : (state, action) => {
+		const rv = state.merge({
+			currentServer: state.currentServer.merge({
+				cookies: state.currentServer.cookies.without(action.payload.key)
+			})
+		});
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	},
-	[DELETE_SERVER_HEADER]: (state, action) => {
-		return state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.setIn(["headers"], newState.headers.delete(action.payload.key));
-		}));
-	},
-	[ADD_SERVER_COOKIE]: (state, action) => {
-		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.mergeIn(["cookies"], new Map(action.payload.cookie));
-		}));
+	[SET_SERVER_METHOD]    : (state, action) => {
+		const rv = state.merge({
+			currentServer: {
+				method: action.payload.method
+			}
+		});
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	},
-	[DELETE_SERVER_COOKIE]: (state, action) => {
-		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.deleteIn(["cookies"], action.payload.key);
-		}));
-		updateBackgroundServer(rv.currentServer);
-		return rv;
-	},
-	[SET_SERVER_METHOD]: (state, action) => {
-		const rv = state.set("currentServer", state.currentServer.withMutations(newState => {
-			return newState.set("method", action.payload.method);
-		}));
-		updateBackgroundServer(rv.currentServer);
-		return rv;
-	},
-	[SELECT_SERVER]: (state, action) => {
-		const rv = state.set("currentServer", action.payload.server);
+	[SELECT_SERVER]        : (state, action) => {
+		const rv = state.merge({currentServer: action.payload.server});
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	}

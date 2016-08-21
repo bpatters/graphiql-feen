@@ -10,11 +10,7 @@ import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import * as NavStateActions from "actions/NavStateActions";
 import IconButton from "material-ui/IconButton";
 import Settings from "containers/Settings";
-import {ServerRecord, GET, POST} from "records/ServerRecord";
-
-import {
-	shouldComponentUpdate
-} from "react-immutable-render-mixin";
+import {ServerRecord, GET, POST} from "model/ServerRecord";
 
 function mapStateToProps(state) {
 	return {
@@ -32,12 +28,10 @@ class Main extends Component {
 		query        : PropTypes.string,
 		variables    : PropTypes.string,
 		leftPanelOpen: PropTypes.bool.isRequired,
-		currentServer: PropTypes.instanceOf(ServerRecord)
+		currentServer: PropTypes.object
 	};
 
 	static defaultProps = {};
-
-	shouldComponentUpdate = shouldComponentUpdate;
 
 	graphQLFetcher     = (data) => {
 		if (this.props.currentServer.method === GET) {
@@ -50,7 +44,7 @@ class Main extends Component {
 		return this.graphQLMultiPartFetcher(data);
 	};
 	graphQLGetFetcher  = (data) => {
-		const headers = this.props.currentServer.headers.toObject();
+		const headers = this.props.currentServer.headers;
 		return fetch(`${this.props.currentServer.url}?query=${data.query}&variables=${data.variables}`, {
 			method     : "get",
 			credentials: "include",
@@ -65,7 +59,7 @@ class Main extends Component {
 		});
 	};
 	graphQLPostFetcher = (data) => {
-		const headers = this.props.currentServer.headers.toObject();
+		const headers = this.props.currentServer.headers;
 		if (!headers.hasOwnProperty("Content-Type")) {
 			headers["Content-Type"] = "application/json;charset=utf-8";
 		}
@@ -92,7 +86,7 @@ class Main extends Component {
 		return fetch(this.props.currentServer.url, {
 			method     : "post",
 			credentials: "include",
-			headers    : this.props.currentServer.headers.toObject(),
+			headers    : this.props.currentServer.headers,
 			body       : formData
 		}).then((res) => {
 			if (res.status === 200) {
