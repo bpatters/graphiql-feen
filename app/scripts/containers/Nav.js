@@ -21,8 +21,8 @@ function mapStateToProps(state) {
 class Nav extends Component {
 	static displayName = "Nav";
 	static propTypes   = {
-		dispatch : PropTypes.func.isRequired,
-		state : PropTypes.object.isRequired
+		dispatch: PropTypes.func.isRequired,
+		state   : PropTypes.object.isRequired
 	};
 
 	static defaultProps = {};
@@ -35,32 +35,38 @@ class Nav extends Component {
 
 	onExport = () => {
 		const message = {
-			type: "DOWNLOAD",
+			type : "DOWNLOAD",
 			state: JSON.stringify(this.props.state)
 		};
 		/*eslint no-undef:0*/
-		chrome.runtime.sendMessage(message, function() {
+		chrome.runtime.sendMessage(message, function () {
 		});
 	};
 
 	onImport = () => {
-		this.refs.fileDrop.onTriggerInput();
+		this.refs.import.onTriggerInput();
 	};
 
 	onImportFile = (newState) => {
-
-		chrome.storage.local.set(
-			{
-				state:newState
-			}
-		);
-/*		this.props.dispatch({
-			type: IMPORT_STATE,
-			state: JSON.parse(newState)
+		this.props.dispatch({
+			type : IMPORT_STATE,
+			state: StateSerialization.parseState(newState)
 		});
 		updateBackgroundServer(this.props.state.currentServer);
-		*/
 	};
+
+	onImportVersion1 = () => {
+		this.refs.importVersion1.onTriggerInput();
+	};
+
+	onImportVersion1File = (newState) => {
+		this.props.dispatch({
+			type : IMPORT_STATE,
+			state: StateSerialization.convertFromVersion1(newState)
+		});
+		updateBackgroundServer(this.props.state.currentServer);
+	};
+
 
 	onResetAll = () => {
 		/*eslint no-undef:0*/
@@ -83,12 +89,16 @@ class Nav extends Component {
 						<MenuItem primaryText="Import" onClick={this.onImport}/>
 						<MenuItem primaryText="Export" onClick={this.onExport}/>
 						<Divider/>
+						<MenuItem primaryText="Import Version1" onClick={this.onImportVersion1}/>
+						<Divider/>
 						<MenuItem primaryText="Erase All Data" onClick={this.onResetAll}/>
 						<Divider/>
 						<MenuItem primaryText="About"/>
-					</IconMenu>}
+					</IconMenu>
+				}
 			>
-				<HiddenFileDrop ref="fileDrop" onChange={this.onImportFile}/>
+				<HiddenFileDrop ref="import" onChange={this.onImportFile}/>
+				<HiddenFileDrop ref="importVersion1" onChange={this.onImportVersion1File}/>
 			</AppBar>
 
 		);

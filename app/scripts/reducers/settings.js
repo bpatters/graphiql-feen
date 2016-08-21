@@ -28,7 +28,7 @@ const reducer = handleActions({
 	[SAVE_SERVER_URL]      : (state, action) => {
 		const rv = state.merge({
 			currentServer: state.currentServer.merge({
-				"url": action.payload.url
+				url: action.payload.url
 			})
 		});
 		updateBackgroundServer(rv.currentServer);

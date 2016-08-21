@@ -39,6 +39,6 @@ export default  handleActions({
 		});
 	},
 	[DELETE_QUERY]        : (state, action) => {
-		return state.merge({queries: filter(state.queries, (value, index) => index != action.payload.index)});
+		return state.merge({queries: filter(state.queries, (value, index) => index !== action.payload.index)});
 	}
 }, initialState);

@@ -10,7 +10,7 @@ import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import * as NavStateActions from "actions/NavStateActions";
 import IconButton from "material-ui/IconButton";
 import Settings from "containers/Settings";
-import {ServerRecord, GET, POST} from "model/ServerRecord";
+import {GET, POST} from "model/ServerRecord";
 
 function mapStateToProps(state) {
 	return {
