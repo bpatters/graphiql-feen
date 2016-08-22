@@ -15,7 +15,7 @@ This is a Chrome Extension that allows you to explore and test GraphQL endpoints
   - Override Cookies if necessary.
   - Only adds/replaces for the graphql Tabs requests.
 - Import/Export your programs state so you can reload if necessary.
-  - -Currently JSON format uses transit-immutables to serialize/deserialize the Immutable program state.-
+  - ~~Currently JSON format uses transit-immutables to serialize/deserialize the Immutable program state.~~
   - 1.0.0 transitions us to Seamless Immutable, so you can export and easily edit your JSON state files and reimport
 
 # Limitations
