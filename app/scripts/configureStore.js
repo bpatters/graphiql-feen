@@ -3,8 +3,8 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
 //import createLogger from "redux-logger";
 import rootReducer from "reducers";
-import storage from "scripts/utils/storage";
-import {IMPORT_STATE, makeImportable} from "scripts/utils/importableState";
+import storage from "utils/storage";
+import {IMPORT_STATE, makeImportable} from "utils/importableState";
 /*eslint camelcase:0 */
 import { unstable_batchedUpdates as batchedUpdates } from "react-dom";
 

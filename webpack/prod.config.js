@@ -1,7 +1,7 @@
 /*eslint no-undef:0*/
-const path         = require("path");
-const webpack      = require("webpack");
-const customPath   = path.join(__dirname, "./customPublicPath");
+const path       = require("path");
+const webpack    = require("webpack");
+const customPath = path.join(__dirname, "./customPublicPath");
 
 module.exports = {
 	entry        : {
@@ -46,9 +46,15 @@ module.exports = {
 		],
 		alias   : {
 			styles    : path.join(__dirname, "../app/styles"),
-			scripts   : path.join(__dirname, "../app/scripts"),
+			images    : path.join(__dirname, "../app/images"),
+			actions   : path.join(__dirname, "../app/scripts/actions"),
 			components: path.join(__dirname, "../app/scripts/components"),
-			images    : path.join(__dirname, "../app/images")
+			containers: path.join(__dirname, "../app/scripts/containers"),
+			model     : path.join(__dirname, "../app/scripts/model"),
+			records   : path.join(__dirname, "../app/scripts/records"),
+			reducers  : path.join(__dirname, "../app/scripts/reducers"),
+			scripts   : path.join(__dirname, "../app/scripts"),
+			utils     : path.join(__dirname, "../app/scripts/utils")
 		}
 	},
 	// Only look in node_modules instead of starting from root

@@ -1,12 +1,20 @@
 import transit from "transit-immutable-js";
-import QueriesRecord from "scripts/records/QueriesRecord";
-import QueryRecord from "scripts/records/QueryRecord";
-import {ServerRecord} from "scripts/records/ServerRecord";
-import SettingsRecord from "scripts/records/SettingsRecord";
-import NavStateRecord from "scripts/records/NavStateRecord";
+import QueriesRecord from "records/QueriesRecord";
+import QueryRecord from "records/QueryRecord";
+import {ServerRecord} from "records/ServerRecord";
+import SettingsRecord from "records/SettingsRecord";
+import NavStateRecord from "records/NavStateRecord";
 import Immutable from "seamless-immutable";
 const etransit = transit.withRecords([QueriesRecord, QueryRecord, ServerRecord, SettingsRecord, NavStateRecord]);
 import throttle from "lodash/throttle";
+
+export function imToJSON(state) {
+	return etransit.toJSON(state);
+}
+
+export function imFromJSON(json) {
+	return json ? etransit.fromJSON(json) : null;
+}
 
 export function parseState(state) {
 	return Immutable(JSON.parse(state));
@@ -16,8 +24,8 @@ export function convertFromVersion1(state) {
 	const oldState = state ? etransit.fromJSON(state) : null;
 
 	if (oldState && oldState.queries && oldState.settings && oldState.navstate) {
-		const newState = {};
-		newState.queries = oldState.queries.toJS();
+		const newState    = {};
+		newState.queries  = oldState.queries.toJS();
 		newState.settings = oldState.settings.toJS();
 		newState.navstate = oldState.navstate.toJS();
 
@@ -32,12 +40,12 @@ export const saveState = throttle((state) => {
 		{
 			state: {
 				version: 2,
-				data  : JSON.stringify(state)
+				data   : JSON.stringify(state)
 			}
 		}
 	);
 //	12 localStorage.setItem({state: stateToJSON(state)});
-}, 500, { leading: true});
+}, 500, {leading: true});
 
 export function loadState(callback) {
 	/*eslint no-undef:0*/

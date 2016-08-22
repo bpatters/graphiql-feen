@@ -7,7 +7,7 @@ import KeyValueView from "components/KeyValueView";
 import RaisedButton from "material-ui/RaisedButton";
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
-import {GET, POST, MULTIPART} from "scripts/model/ServerRecord";
+import {GET, POST, MULTIPART} from "model/ServerRecord";
 import map from "lodash/map";
 
 function mapStateToProps(state) {

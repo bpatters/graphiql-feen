@@ -5,7 +5,8 @@ machine:
 dependencies:
   pre:
     - npm install -g npm@latest
-    - npm install -g node-sass
+    - npm install -g node-sass@latest
+    - npm install --global mocha@latest
   override:
     - npm i
 test:

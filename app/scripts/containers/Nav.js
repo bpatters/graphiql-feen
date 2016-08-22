@@ -7,8 +7,8 @@ import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
 import Divider from "material-ui/Divider";
 import * as NavStateActions from "actions/NavStateActions";
-import * as StateSerialization from "scripts/utils/serialization";
-import {IMPORT_STATE} from "scripts/utils/importableState";
+import * as StateSerialization from "utils/serialization";
+import {IMPORT_STATE} from "utils/importableState";
 import HiddenFileDrop from "components/HiddenFileDrop";
 import {updateBackgroundServer} from "actions/SettingsActions";
 

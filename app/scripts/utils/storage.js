@@ -1,6 +1,6 @@
 /*eslint no-undef:0*/
 /*eslint extra-rules/no-commented-out-code:0*/
-import {saveState} from "scripts/utils/serialization";
+import {saveState} from "utils/serialization";
 
 export default function () {
 	return next => (reducer, initialState) => {

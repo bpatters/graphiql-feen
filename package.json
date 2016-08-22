@@ -1,6 +1,6 @@
 {
   "name": "graphiql-feen",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Chrome extensions for working with GraphQL",
   "scripts": {
     "dev": "node scripts/dev",
@@ -10,7 +10,7 @@
     "clean": "rm -rf build/ dev/ *.zip *.crx",
     "lint": "eslint app chrome test scripts webpack/*.js",
     "test-e2e": "cross-env NODE_ENV=test mocha test/e2e",
-    "test": "cross-env NODE_ENV=test mocha -r ./test/setup-app test/app"
+    "test": "cross-env NODE_PATH=app/scripts NODE_ENV=test mocha -r ./test/setup-app test/app"
   },
   "repository": {
     "type": "git",
@@ -22,8 +22,7 @@
     "react",
     "redux",
     "hot reload",
-    "webpack",
-    "boilerplate"
+    "webpack"
   ],
   "author": "Bret Patterson <bret@bretpatterson.com>",
   "license": "MIT",
