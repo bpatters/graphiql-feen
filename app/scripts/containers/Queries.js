@@ -9,7 +9,7 @@ import TextField from "material-ui/TextField";
 import * as QueryActions from "actions/QueryActions";
 import ActionInfo from "material-ui/svg-icons/action/delete-forever";
 import CloseIcon from "material-ui/svg-icons/navigation/close";
-import findKey from "lodash/findKey";
+import findIndex from "lodash/findIndex";
 
 function mapStateToProps(state) {
 	return {
@@ -65,25 +65,21 @@ class Queries extends Component {
 	saveQuery = () => {
 		const index = this.queryWithNameIndex();
 
-		const action = () => {
+		if (index === -1) {
 			this.props.dispatch(QueryActions.saveCurrentQuery());
-		};
-		if (typeof index === "undefined") {
-			action();
 		} else {
-			this.props.dispatch(QueryActions.deleteQuery(index));
-			action();
+			this.props.dispatch(QueryActions.updateQuery());
 		}
 	};
 
 	queryWithNameIndex = () => {
-		return findKey(this.props.queries, (query) => {
+		return findIndex(this.props.queries, (query) => {
 			return query.name === this.props.currentQuery.name;
 		});
 	};
 
 	queryWithNameExists() {
-		return !(typeof this.queryWithNameIndex() === "undefined");
+		return !(this.queryWithNameIndex() === -1);
 	}
 
 	render() {

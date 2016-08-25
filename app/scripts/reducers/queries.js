@@ -1,6 +1,7 @@
 import {handleActions} from "redux-actions";
 import {
 	ADD_QUERY,
+	UPDATE_QUERY,
 	UPDATE_CURRENT_QUERY,
 	DELETE_QUERY,
 	SAVE_CURRENT_QUERY
@@ -40,5 +41,12 @@ export default  handleActions({
 	},
 	[DELETE_QUERY]        : (state, action) => {
 		return state.merge({queries: filter(state.queries, (value, index) => index !== action.payload.index)});
+	},
+	[UPDATE_QUERY]        : (state) => {
+		return state.merge({
+			queries: state.queries.flatMap((query) => {
+				return query.name === state.currentQuery.name ? state.currentQuery : query;
+			})
+		});
 	}
 }, initialState);
