@@ -59,7 +59,7 @@ class Main extends Component {
 		});
 	};
 	graphQLPostFetcher = (data) => {
-		const headers = this.props.currentServer.headers;
+		const headers = Object.assign({}, this.props.currentServer.headers);
 		if (!headers.hasOwnProperty("Content-Type")) {
 			headers["Content-Type"] = "application/json;charset=utf-8";
 		}

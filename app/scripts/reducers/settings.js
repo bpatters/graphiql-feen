@@ -70,10 +70,10 @@ const reducer = handleActions({
 	},
 	[SET_SERVER_METHOD]    : (state, action) => {
 		const rv = state.merge({
-			currentServer: {
-				method: action.payload.method
-			}
-		});
+					currentServer: state.currentServer.merge({
+						method: action.payload.method
+					})
+				});
 		updateBackgroundServer(rv.currentServer);
 		return rv;
 	},
