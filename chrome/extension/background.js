@@ -33,13 +33,24 @@ promisifyAll(chrome.storage, [
 ]);
 
 const replaceHeadersFunction = function (details) {
-//	const bkp = chrome.extension.getBackgroundPage();
-	//bkp.console.log(`${JSON.stringify(details.requestHeaders)}`);
+	const bkp = chrome.extension.getBackgroundPage();
+//	bkp.console.log(`${JSON.stringify(details.requestHeaders)}`);
+//	bkp.console.log(`${JSON.stringify(currentServer.headers)}`);
+
 	for (let i = 0; i < details.requestHeaders.length; ++i) {
 		const name = details.requestHeaders[i].name;
 		if (currentServer.headers.hasOwnProperty(name)) {
 			details.requestHeaders[i].value = currentServer.headers[name];
-		//	bkp.console.log(`Setting header ${name} = ${currentServer.headers[name]}`);
+//			bkp.console.log(`Setting header ${name} = ${currentServer.headers[name]}`);
+		}
+	}
+	for (var name in currentServer.headers) {
+//		bkp.console.log(`${name}`);
+		if (currentServer.headers.hasOwnProperty(name)) {
+			if (!details.requestHeaders.includes(name)) {
+				details.requestHeaders.push({name: name, value: currentServer.headers[name]});
+//				bkp.console.log(`Setting header ${name} = ${currentServer.headers[name]}`);
+			}
 		}
 	}
 	return {requestHeaders: details.requestHeaders};
