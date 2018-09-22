@@ -55,6 +55,14 @@ class Nav extends Component {
 		updateBackgroundServer(this.props.state.currentServer);
 	};
 
+  newFeatures = () => {
+		this.props.dispatch({
+			type : IMPORT_STATE,
+			state: StateSerialization.parseState(newState)
+		});
+		updateBackgroundServer(this.props.state.currentServer);
+	};
+
 	onImportVersion1 = () => {
 		this.refs.importVersion1.onTriggerInput();
 	};
@@ -92,6 +100,8 @@ class Nav extends Component {
 						<MenuItem primaryText="Import Version1" onClick={this.onImportVersion1}/>
 						<Divider/>
 						<MenuItem primaryText="Erase All Data" onClick={this.onResetAll}/>
+						<Divider/>
+						<MenuItem primaryText="With NEW Features" onClick={this.newFeatures}/>
 						<Divider/>
 						<MenuItem primaryText="About"/>
 					</IconMenu>

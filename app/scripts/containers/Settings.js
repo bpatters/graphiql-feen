@@ -9,6 +9,9 @@ import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 import {GET, POST, MULTIPART} from "model/ServerRecord";
 import map from "lodash/map";
+import Avatar from "material-ui/Avatar";
+import Chip from "material-ui/Chip";
+import Paper from "material-ui/Paper";
 
 function mapStateToProps(state) {
 	return {
@@ -59,6 +62,10 @@ class Settings extends Component {
 		this.props.dispatch(SettingsActions.saveCurrentServer());
 	};
 
+	onDeleteServer = (val) => {
+		this.props.dispatch(SettingsActions.deleteCurrentServer(val));
+	};
+
 	onServerSelected = (chosenRequest) => {
 		if (this.props.servers[chosenRequest.text]) {
 			this.props.dispatch(SettingsActions.selectServer(this.props.servers[chosenRequest.text]));
@@ -95,6 +102,23 @@ class Settings extends Component {
 				</div>
 
 				<div className={styles.tables}>
+
+          <Paper style={{width: "100%", padding: "10px", marginBottom: "10px"}}>
+            <h4>Servers History:</h4>
+            <div style={{display: "flex", flexWrap: "wrap"}}>
+              {map(this.props.servers, (server, index) => {
+                return (<Chip
+                  key={server.url}
+                  style={{marginRight: "5px"}}
+                  onClick={()=> this.onServerSelected({text: server.url, value: server})}
+                  onRequestDelete={() => this.onDeleteServer(index)}>
+                  <Avatar size={32}>{server.method.charAt(0).toUpperCase()}</Avatar>
+                  {server.url}
+                </Chip>);
+              }
+            )}
+            </div>
+          </Paper>
 					<KeyValueView
 						addLabel="Add Header"
 						keyLabel="Header Name"

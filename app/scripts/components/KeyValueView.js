@@ -46,10 +46,15 @@ class KeyValueView extends Component {
 		this.setState({key: "", value: ""});
 	};
 
+  selectItem = (value, key) => {
+		this.setState({key, value});
+	};
+
 	renderHeaderTableRows = () => {
 		return map(this.props.keyValueMap, (value, key) => {
 			return (
 				<ListItem key={`key-${key}`} primaryText={`${key} = ${value}`}
+                  onClick={()=>this.selectItem(value, key)}
 									rightIconButton={<IconButton onClick={this.onDeleteKeyPrivate(key)}><CloseIcon/></IconButton>}/>
 			);
 		});
