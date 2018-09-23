@@ -50,6 +50,7 @@ class Queries extends Component {
 			return (
 				<ListItem
 					key={index}
+          className={styles.ovText}
 					primaryText={query.name}
 					onClick={this.onQuerySelect(index)}
 					rightIcon={<ActionInfo onClick={this.onQueryDelete(index)}/>}
