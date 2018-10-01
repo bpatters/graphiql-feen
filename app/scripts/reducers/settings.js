@@ -23,7 +23,7 @@ const reducer = handleActions({
 		return state.merge({servers: state.servers.merge(newEntry)});
 	},
 	[DELETE_CURRENT_SERVER]: (state, action) => {
-		return state.merge({servers: state.servers.delete(action.payload.index)});
+		return state.merge({servers: state.servers.without(action.payload.index)});
 	},
 	[SAVE_SERVER_URL]      : (state, action) => {
 		const rv = state.merge({

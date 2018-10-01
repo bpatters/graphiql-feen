@@ -21,5 +21,10 @@
 	align-items: flex-start;
 	justify-content: flex-end;
 }
+.ovText > div > div > div {
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
 
 
